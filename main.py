@@ -3,11 +3,6 @@ from time import sleep
 import pygame
 import sys
 
-with open("score.txt", "r") as f:
-    highScore = f.read()  # Read all file in case values are not on a single line
-    highScore_int = [int(x) for x in highScore.split()
-                     ]  # Convert strings to ints
-score = 0
 
 pygame.font.init()
 myFont = pygame.font.SysFont("monospace", 35)
@@ -16,6 +11,7 @@ pygame.init()
 
 SIZE = WIDTH, HEIGHT = 640, 460
 SCREEN = pygame.display.set_mode(SIZE)
+SCREEN_CENTER = (WIDTH / 3, HEIGHT / 2)
 pygame.display.set_caption("Almost Asteroids")
 
 CLOCK = pygame.time.Clock()
@@ -25,6 +21,7 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
 PLAYER = pygame.image.load("images/square.png")
+PLAYER = pygame.transform.smoothscale(PLAYER, (30, 30))
 PLAYERRECT = PLAYER.get_rect(center=(WIDTH/2, HEIGHT/2))
 
 ENEMY = pygame.image.load("images/enemy.png")
@@ -63,43 +60,21 @@ class Enemy():
 
 def game_over():
     SCREEN.fill(BLACK)
+    for enemy in list_of_enemies:
+        list_of_enemies.remove(enemy)
     text = "Game Over"
     label = myFont.render(text, 1, WHITE)
-    SCREEN.blit(label, (350, 350))
-
-    end_score = "Score:" + str(score)
-    label_2 = myFont.render(end_score, 1, WHITE)
-    SCREEN.blit(label_2, (350, 250))
-
-    with open("score.txt", "w") as f:
-        for content in highScore_int:
-            if content < score:
-                f.write(score)
-                hs = "You got the highscore. well done!"
-                label_3 = myFont.render(hs, 1, WHITE)
-                # Or any other position you want!
-                SCREEN.blit(label_3, (350, 150))
-                pygame.display.update()
-
-            else:
-                hs = "The highscore is: ", content
-                label_3 = myFont.render(hs, 1, WHITE)
-                # Or any other position you want!
-                SCREEN.blit(label_3, (350, 150))
-                pygame.display.update()
-
-    sleep(10)
-    sys.exit()
+    SCREEN.blit(label, SCREEN_CENTER)
+    pygame.display.update()
+    pygame.time.delay(1500)
 
 
-def drawGame(score):
+def drawGame():
     p = Player(PLAYERRECT, PLAYERSPEED)
     e = Enemy()
 
     while True:
         CLOCK.tick(60)
-
-        score += 1
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -128,10 +103,8 @@ def drawGame(score):
 
             if rect.colliderect(PLAYERRECT):
                 game_over()
-                pygame.quit()
-                sys.exit()
 
         pygame.display.update()
 
 
-drawGame(score)
+drawGame()
