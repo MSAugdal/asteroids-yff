@@ -27,9 +27,8 @@ ENEMY = pygame.image.load("images/enemy.png")
 ENEMYRECT = ENEMY.get_rect()
 list_of_enemies = []
 
+
 # lager en klasse for spilleren
-
-
 class Player():
     def __init__(self, PLAYERRECT, PLAYERSPEED):
         self.rect = PLAYERRECT
@@ -58,9 +57,8 @@ class Player():
         if PLAYERRECT.right < 0:
             PLAYERRECT.centerx = (WIDTH)
 
+
 # lager en klasse for fiendene
-
-
 class Enemy():
     def __init__(self):
         ENEMY = pygame.image.load("images/enemy.png")
