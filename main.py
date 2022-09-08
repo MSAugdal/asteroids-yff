@@ -75,11 +75,13 @@ class Enemy():
 # lager en funksjon som "tegner" spillet og håndterer mestepartn av logikken
 def drawGame():
     score = 0
+
     p = Player(PLAYERRECT, PLAYERSPEED)
     PLAYERRECT.center = (WIDTH/2, HEIGHT/2)
     e = Enemy()
     while True:
         CLOCK.tick(60)
+
         score += 1
 
         # lukker spillet om spilleren trykker på krysset
@@ -142,6 +144,13 @@ def drawGame():
                         if event.type == pygame.KEYDOWN:
                             if event.key == pygame.K_SPACE:
                                 drawGame()
+
+        # show score counter in top left corner
+        scoreLabel = myFont.render("Score: " + str(score), 1, WHITE)
+        scoreLabelSize = (scoreLabel.get_width(), scoreLabel.get_height())
+        scoreLabel = pygame.transform.smoothscale(
+            scoreLabel, (scoreLabelSize[0]/1.5, scoreLabelSize[1]/1.5))
+        SCREEN.blit(scoreLabel, (10, 10))
 
         pygame.display.update()
 
